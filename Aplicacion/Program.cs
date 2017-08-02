@@ -20,32 +20,54 @@ namespace Metainformacion
                 new Person(){Id=2, Surname="Hurtado"},
             };
 
+            // Hacemos genericos todos los objetos, para tratarlos a todos con el mismo código
             var generics = ToGeneric(people);
 
+            validateGeneric(generics);
+
+
+            
+        }
+
+        /// <summary>
+        /// Validamos una lista de objetos genericos
+        /// </summary>
+        /// <param name="genericList"></param>
+        static void validateGeneric(List<Generic> genericList)
+        {
             //Tenemos que validar los elementos antes de guardarlos en la base de datos
-            foreach(var generic in generics)
+            foreach (var generic in genericList)
             {
                 var type = generic.GetType(); //Obtenemos el tipo
                 var properties = type.GetProperties(); //Obtenemos las propiedades de la clase
-                foreach(var property in properties)
+                foreach (var property in properties)
                 {
                     var value = property.GetValue(generic); //Obtenemos el valor de la propiedad de una instancia
                 }
             }
-
-            List<Generic> ToGeneric(List<Object> list)
-            {
-                return list.Select(c => new Generic { obj = c, type = c.GetType() }); //Obtenemos lista de objetos genericos
-            }
         }
 
-
-        //Clase generica para pasar todos los objetos de cualquier tipo a un objeto de tipo generico
-        public class Generic
+        /// <summary>
+        /// Hacemos una lista de objetos generica a partir de una lista de cualquier tipo
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        static List<Generic> ToGeneric(IEnumerable<Object> list)
         {
-            public Object obj { get; set; }
-            public Type type { get; set; }
+            var genericList = new List<Generic>();
+            foreach (var obj in list)
+            {
+                genericList.Add(new Generic { obj = obj, type = obj.GetType() });
+            }
+            return genericList;
         }
+    }
+
+    //Clase generica para pasar todos los objetos de cualquier tipo a un objeto de tipo generico
+    public class Generic
+    {
+        public Object obj { get; set; }
+        public Type type { get; set; }
     }
 
     /// <summary>
