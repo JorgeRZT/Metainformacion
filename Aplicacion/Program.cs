@@ -22,11 +22,7 @@ namespace Metainformacion
 
             // Hacemos genericos todos los objetos, para tratarlos a todos con el mismo código
             var generics = ToGeneric(people);
-
             validateGeneric(generics);
-
-
-            
         }
 
         /// <summary>
